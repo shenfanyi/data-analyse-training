@@ -1,0 +1,109 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Dec 29 15:03:19 2016
+
+@author: fintech_employee
+"""
+
+
+#with open('README.txt') as f:
+#    for line in f:
+#        print line
+##        break
+#print type(f)
+
+
+#with open('Stakeholders-and-roles.txt') as f:
+#    for line in f:
+#        print line
+##        break
+#print type(f)
+
+#with open('Req-list.txt') as f:
+#    for line in f:
+#        print line
+##        break
+#print type(f)
+
+#with open('Raw-requirements.txt') as f:
+#    for line in f:
+#        print line
+##        break
+#print type(f)
+
+
+import pandas as pd
+r = []
+
+with open('ClosedR.txt') as f:
+    for line in f:
+        r.append(line)
+#        break
+
+with open('OpenR.txt') as f:
+    for line in f:
+        r.append(line)
+#        break
+#df = pd.DataFrame(r)  
+#print df
+#print df.dtypes
+#print type(df)
+#print r
+#print type(r)
+#print type(r[0])
+
+
+#x = 'Aaron Toms\tAndy Hicks\t10\n'
+#import re
+#c = re.split('\t',x)
+#print c[2]
+#print type(c)
+#print type(x)
+
+#import re
+#a = re.split('\t',r[0])
+##a = re.split('\t'，r)
+##上一条错误，上上条正确，因为re.split只对string起作用，不对list等起作用
+#print a
+#print type(a)
+#print a[2]
+
+
+import re
+ls = []
+for i in range(len(r)):
+    line = re.split("\t|\n",r[i])
+#    print line
+    ls.append(line[:3])
+#print ls
+#print ls[0][0]
+data1 = pd.DataFrame(ls,columns = ['recommender','recommendee','level of influence'])
+data1['level of influence'] = data1['level of influence'].apply(int)
+data1.to_csv('data1')
+#read = pd.read_csv('data1')
+#print read.head()
+
+
+#print data1.sort_index(by=['recommender','recommendee'])
+#print data1.sort_index(by=['recommendee','recommender'])
+data3 = data1.groupby('recommendee').mean()
+data4 = data3.sort_index(by = 'level of influence')
+data4.index = range(len(data4))
+print data4
+
+    
+#data2 = data1.sort_index(by=['recommendee','recommender'])
+
+
+import matplotlib.pyplot as plt
+#plt.scatter(data4.index,data4['level of influence'])
+data4['level of influence'].hist(bins=5)
+#data4['level of influence'].plot(kind='kde')
+
+import seaborn as sns
+sns.set_style("ticks")
+#sns.boxplot(x='recommendee',y='level of influence',data=data1)
+#sns.residplot(data4.index,data4['level of influence'], lowess=True, color="g")
+
+
+
